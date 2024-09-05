@@ -12,6 +12,8 @@ pub fn enum_from(input: TokenStream) -> TokenStream {
     print!("{:#?}", input);
     // get the ident
     let ident = &input.ident;
+    // get generics
+    let generics = &input.generics;
     // get enum variants
     let variants = match &input.data {
         Data::Enum(data) => &data.variants,
@@ -29,7 +31,7 @@ pub fn enum_from(input: TokenStream) -> TokenStream {
                     let field = &fields.unnamed.first().unwrap();
                     let ty = &field.ty;
                     quote! {
-                        impl From <#ty> for #ident {
+                        impl #generics From <#ty> for #ident #generics {
                             fn from(v: #ty) -> Self {
                                 #ident::#var(v)
                             }
